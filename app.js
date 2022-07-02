@@ -3,8 +3,24 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
-// const { userRouter } = require('./routes/users');
+const { isAuthorized } = require('./middlewares/auth');
+const { userRouter } = require('./routes/users');
+const { movieRouter } = require('./routes/movies');
 const { createUser, login } = require('./controllers/users');
+
+// require('dotenv').config();
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const { celebrate, Joi } = require('celebrate');
+// const validator = require('validator');
+// const { errors } = require('celebrate');
+// const cors = require('cors');
+// const { userRouter } = require('./routes/users');
+// const { cardRouter } = require('./routes/cards');
+// const { login, createUser } = require('./controllers/users');
+// const { isAuthorized } = require('./middlewares/auth');
+// const { requestLogger, errorLogger } = require('./middlewares/logger');
+
 
 const app = express();
 mongoose.connect('mongodb://localhost:27017/moviesdb');
@@ -17,12 +33,6 @@ app.use(express.json());
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
-    // email: Joi.string().required().custom((value, helpers) => {
-    //   if (validator.isEmail(value)) {
-    //     return value;
-    //   }
-    //   return helpers.message('Email введен некорректно');
-    // }),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
@@ -35,12 +45,47 @@ app.post('/signin', celebrate({
   }),
 }), login);
 
-// app.use('/users', userRouter);
+app.use(isAuthorized);
 
-// app.use(errorLogger);
+const validateMovie = celebrate({
+  body: Joi.object().keys({
+    country: Joi.string().required(),
+    director: Joi.string().required(),
+    duration: Joi.number().required(),
+    year: Joi.number().required(),
+    description: Joi.string().required(),
+    image: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value, { protocols: ['http', 'https', 'ftp'], require_tld: true, require_protocol: true })) {
+        return value;
+      }
+      return helpers.message('Ссылка введена некорректно');
+    }),
+    trailerLink: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value, { protocols: ['http', 'https', 'ftp'], require_tld: true, require_protocol: true })) {
+        return value;
+      }
+      return helpers.message('Ссылка введена некорректно');
+    }),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
+    thumbnail: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Ссылка введена некорректно');
+    }),
+    movieId: Joi.number().required(),
+  }),
+});
+// country, director, duration,
+// year, description, image, trailer, nameRU, nameEN и thumbnail,
+// movieId
+
+app.use('/users', userRouter);
+app.use('/movies', validateMovie, movieRouter);
 
 app.use((req, res, next) => {
-  const error = new Error('This page does not exist');
+  const error = new Error('Страница не существует');
   error.statusCode = 404;
   next(error);
 });

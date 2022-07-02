@@ -2,6 +2,35 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { generateToken } = require('../middlewares/auth');
 
+const updateUserInfo = (req, res, next) => {
+  const { name, email } = req.body;
+  User.findByIdAndUpdate(req.user.id, { name, email }, { new: true, runValidators: true })
+    .then((user) => {
+      if (!user) {
+        const err = new Error('Пользователь не найден');
+        err.statusCode = 404;
+        throw err;
+      }
+      return res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.code === 11000) {
+        const duplicateError = new Error('Пользователь с таким email уже зарегистрирован');
+        duplicateError.statusCode = 409;
+        return next(duplicateError);
+      }
+      return next(err);
+    });
+};
+
+const getUserInfo = (req, res, next) => {
+  User.findById(req.user.id)
+    .then((user) => res.status(200).send(user))
+    .catch((err) => {
+      next(err);
+    });
+};
+
 const login = (req, res, next) => {
   const { email, password } = req.body;
   User.findOne({ email }).select('+password')
@@ -66,7 +95,10 @@ const createUser = (req, res, next) => {
     })
     .catch((err) => next(err));
 };
+
 module.exports = {
   createUser,
   login,
+  getUserInfo,
+  updateUserInfo,
 };

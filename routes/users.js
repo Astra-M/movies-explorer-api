@@ -7,13 +7,9 @@
 const userRouter = require('express').Router();
 const validator = require('validator');
 const { celebrate, Joi } = require('celebrate');
+const { getUserInfo, updateUserInfo } = require('../controllers/users');
 
-const {
-  getUser,
-  updateUser,
-} = require('../controllers/users');
-
-userRouter.get('/me', getUser);
+userRouter.get('/me', getUserInfo);
 
 userRouter.patch('/me', celebrate({
   body: Joi.object().keys({
@@ -25,7 +21,7 @@ userRouter.patch('/me', celebrate({
       return helpers.message('Email введен некорректно');
     }),
   }),
-}), updateUser);
+}), updateUserInfo);
 
 module.exports = { userRouter };
 
@@ -69,5 +65,3 @@ module.exports = { userRouter };
 // }), updateUserAvatar);
 
 // module.exports = { userRouter };
-
-
