@@ -8,6 +8,9 @@ const deleteMovie = (req, res, next) => {
         err.statusCode = 404;
         return next(err);
       }
+      //сделать валидацию когда больше или меньше знаков, иначе выдается
+      //в консоли ошибка, помимо ошибки сервера, либо мидлварой,
+      //либо в иф каст еррор прописать
       const movieOwner = movie.owner.toString();
       if (movieOwner !== req.user.id) {
         const err = new Error('Вы можете удалять только свои фильмы');
