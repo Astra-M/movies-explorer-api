@@ -77,12 +77,10 @@ const validateMovie = celebrate({
     movieId: Joi.number().required(),
   }),
 });
-// country, director, duration,
-// year, description, image, trailer, nameRU, nameEN и thumbnail,
-// movieId
 
 app.use('/users', userRouter);
-app.use('/movies', validateMovie, movieRouter);
+// app.use('/movies', validateMovie, movieRouter);
+app.use('/movies', movieRouter);
 
 app.use((req, res, next) => {
   const error = new Error('Страница не существует');
@@ -99,12 +97,3 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: 'Ошибка сервера' });
   return next(err);
 });
-
-
-
-
-
-// app.listen(PORT, () => {
-//   // Если всё работает, консоль покажет, какой порт приложение слушает
-//   console.log(`App listening on port ${PORT}`);
-// })
