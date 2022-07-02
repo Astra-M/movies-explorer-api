@@ -6,6 +6,7 @@ const validator = require('validator');
 // const routes = require('./routes');
 // const routes = require('./routes/index');
 const { router } = require('./routes/index');
+const { errorHandler } = require('./utils/errorHandler');
 
 // const { isAuthorized } = require('./middlewares/auth');
 // const { userRouter } = require('./routes/users');
@@ -96,14 +97,15 @@ app.use(router);
 // });
 
 app.use(errors());
+app.use(errorHandler);
 
-app.use((err, req, res, next) => {
-  if (err.statusCode) {
-    return res.status(err.statusCode).send({ message: err.message || 'Что-то пошло не так' });
-  }
-  if (err.name === 'CastError') {
-    return res.status(400).send({ message: 'Данные не прошли валидацию' });
-  }
-  res.status(500).send({ message: 'Ошибка сервера' });
-  return next(err);
-});
+// app.use((err, req, res, next) => {
+//   if (err.statusCode) {
+//     return res.status(err.statusCode).send({ message: err.message || 'Что-то пошло не так' });
+//   }
+//   if (err.name === 'CastError') {
+//     return res.status(400).send({ message: 'Данные не прошли валидацию' });
+//   }
+//   res.status(500).send({ message: 'Ошибка сервера' });
+//   return next(err);
+// });
