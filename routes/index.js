@@ -15,6 +15,7 @@ const { validateUserInfo, validateAuth } = require('../middlewares/validation');
 // }), createUser);
 
 router.post('/signup', validateUserInfo, createUser);
+// router.post('/signup', createUser);
 router.post('/signin', validateAuth, login);
 
 // router.post('/signin', celebrate({

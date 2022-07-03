@@ -1,6 +1,19 @@
 const { Joi, celebrate } = require('celebrate');
 const { validator } = require('validator');
 
+const validateUpdateUser = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    email: Joi.string().required().email(),
+    // email: Joi.string().custom((value, helpers) => {
+    //   if (validator.isEmail(value)) {
+    //     return value;
+    //   }
+    //   return helpers.message('Email введен некорректно');
+    // }),
+  }),
+});
+
 const validateUserInfo = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -40,13 +53,13 @@ const validateMovie = celebrate({
     // }),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    // thumbnail: Joi.string().required().uri(),
-    thumbnail: Joi.string().required().custom((value, helpers) => {
-      if (validator.isURL(value)) {
-        return value;
-      }
-      return helpers.message('Ссылка введена некорректно');
-    }),
+    thumbnail: Joi.string().required().uri(),
+    // thumbnail: Joi.string().required().custom((value, helpers) => {
+    //   if (validator.isURL(value)) {
+    //     return value;
+    //   }
+    //   return helpers.message('Ссылка введена некорректно');
+    // }),
     // thumbnail: Joi.string().required().custom((value) => {
     //   if (validator.isURL(value)) {
     //     return value;
@@ -60,4 +73,9 @@ const validateMovie = celebrate({
   }),
 });
 
-module.exports = { validateMovie, validateUserInfo, validateAuth };
+module.exports = {
+  validateMovie,
+  validateUserInfo,
+  validateUpdateUser,
+  validateAuth,
+};

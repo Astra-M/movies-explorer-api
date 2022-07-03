@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
-const { celebrate, Joi } = require('celebrate');
-const validator = require('validator');
+// const { celebrate, Joi } = require('celebrate');
+// const validator = require('validator');
 // const routes = require('./routes');
 // const routes = require('./routes/index');
 const { router } = require('./routes/index');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./utils/errorHandler');
 
 // const { isAuthorized } = require('./middlewares/auth');
@@ -84,6 +85,8 @@ app.use(express.json());
 // });
 
 // app.use(routes);
+
+app.use(requestLogger);
 app.use(router);
 
 // app.use('/users', userRouter);
@@ -96,6 +99,7 @@ app.use(router);
 //   next(error);
 // });
 
+app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 

@@ -27,20 +27,35 @@ const deleteMovie = (req, res, next) => {
 };
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
-    .then((movies) => {
-      if (!movies) {
-        const err = new Error('Вы пока не сохранили ни одного фильма');
-        err.statusCode = 404;
-        // throw err;
-        return next(err);
-      }
-      return res.status(200).send(movies);
-    })
-    .catch((err) => {
-      next(err);
-    });
+// req.user.id
+
+  Movie.find({ owner: req.user.id })
+    .then((movies) => res.status(200).send(movies))
+// if (movieOwner === req.user.id)
+  // console.log(req.user)
+  // Movie.findById(req.user.id)
+  // .then((movies) => {
+  //   movies.forEach((movie) => {
+  //     console.log(movie)
+  //   })
+    .catch(next);
 };
+
+// const getMovies = (req, res, next) => {
+//   Movie.find({})
+//     .then((movies) => {
+//       if (!movies) {
+//         const err = new Error('Вы пока не сохранили ни одного фильма');
+//         err.statusCode = 404;
+//         // throw err;
+//         return next(err);
+//       }
+//       return res.status(200).send(movies);
+//     })
+//     .catch((err) => {
+//       next(err);
+//     });
+// };
 
 const createMovie = (req, res, next) => {
   const {

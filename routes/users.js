@@ -8,20 +8,35 @@ const userRouter = require('express').Router();
 const validator = require('validator');
 const { celebrate, Joi } = require('celebrate');
 const { getUserInfo, updateUserInfo } = require('../controllers/users');
+const { validateUpdateUser } = require('../middlewares/validation');
 
 userRouter.get('/me', getUserInfo);
 
-userRouter.patch('/me', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    email: Joi.string().custom((value, helpers) => {
-      if (validator.isEmail(value)) {
-        return value;
-      }
-      return helpers.message('Email введен некорректно');
-    }),
-  }),
-}), updateUserInfo);
+// const validateUpdateUser = celebrate({
+//   body: Joi.object().keys({
+//     name: Joi.string().min(2).max(30),
+//     email: Joi.string().custom((value, helpers) => {
+//       if (validator.isEmail(value)) {
+//         return value;
+//       }
+//       return helpers.message('Email введен некорректно');
+//     }),
+//   }),
+// });
+
+userRouter.patch('/me', validateUpdateUser, updateUserInfo);
+
+// userRouter.patch('/me', celebrate({
+//   body: Joi.object().keys({
+//     name: Joi.string().min(2).max(30),
+//     email: Joi.string().custom((value, helpers) => {
+//       if (validator.isEmail(value)) {
+//         return value;
+//       }
+//       return helpers.message('Email введен некорректно');
+//     }),
+//   }),
+// }), updateUserInfo);
 
 module.exports = { userRouter };
 
