@@ -1,5 +1,4 @@
 const movieRouter = require('express').Router();
-// const { validator } = require('validator');
 const { validateMovie } = require('../middlewares/validation');
 const { createMovie, getMovies, deleteMovie } = require('../controllers/movies');
 

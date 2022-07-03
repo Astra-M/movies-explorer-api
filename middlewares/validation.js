@@ -30,14 +30,12 @@ const validateMovie = celebrate({
     duration: Joi.number().required(),
     year: Joi.number().required(),
     description: Joi.string().required(),
-    // image: Joi.string().required(),
     image: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value, { protocols: ['http', 'https', 'ftp'], require_tld: true, require_protocol: true })) {
         return value;
       }
       return helpers.message('Ссылка введена некорректно');
     }),
-    // trailerLink: Joi.string().required(),
     trailerLink: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value, { protocols: ['http', 'https', 'ftp'], require_tld: true, require_protocol: true })) {
         return value;
@@ -46,7 +44,6 @@ const validateMovie = celebrate({
     }),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    // thumbnail: Joi.string().required().uri(),
     thumbnail: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
         return value;
