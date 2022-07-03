@@ -1,5 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const { errors } = require('celebrate');
 // const { celebrate, Joi } = require('celebrate');
 // const validator = require('validator');
@@ -9,6 +11,15 @@ const { router } = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./utils/errorHandler');
 
+const options = {
+  origin: [
+    'http://localhost:3000',
+    // 'https://astra.nomoredomains.xyz',
+    // 'http://astra.nomoredomains.xyz',
+    // 'https://astra-m.github.io',
+  ],
+  credentials: true,
+};
 // const { isAuthorized } = require('./middlewares/auth');
 // const { userRouter } = require('./routes/users');
 // const { movieRouter } = require('./routes/movies');
@@ -35,6 +46,7 @@ const { PORT = 3001 } = process.env;
 app.listen(PORT);
 
 app.use(express.json());
+app.use('*', cors(options));
 
 // app.post('/signup', celebrate({
 //   body: Joi.object().keys({
