@@ -9,7 +9,7 @@
 
 Публичный IP-адрес сервера: 84.201.162.151;
 
-Домен: astra.nomoredomains.xyz;
+Домен: api.aurora.nomoredomains.sbs;
 
 Cсылка на сайт, размещенный на Яндекс.Облаке:
 - http://api.aurora.nomoredomains.sbs,
