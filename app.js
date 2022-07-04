@@ -6,25 +6,16 @@ const { errors } = require('celebrate');
 const { router } = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./utils/errorHandler');
-
-const options = {
-  origin: [
-    'http://localhost:3000',
-    // 'https://astra.nomoredomains.xyz',
-    // 'http://astra.nomoredomains.xyz',
-    // 'https://astra-m.github.io',
-  ],
-  credentials: true,
-};
+const { corsOptions, mongooseUrl } = require('./utils/constants');
 
 const app = express();
-mongoose.connect('mongodb://localhost:27017/moviesdb');
+mongoose.connect(mongooseUrl);
 
 const { PORT = 3001 } = process.env;
 app.listen(PORT);
 app.use(express.json());
 
-app.use('*', cors(options));
+app.use('*', cors(corsOptions));
 
 app.use(requestLogger);
 

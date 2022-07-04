@@ -12,5 +12,5 @@
 Домен: astra.nomoredomains.xyz;
 
 Cсылка на сайт, размещенный на Яндекс.Облаке:
-- http://,
-- https://
+- http://api.aurora.nomoredomains.sbs,
+- https://api.aurora.nomoredomains.sbs
