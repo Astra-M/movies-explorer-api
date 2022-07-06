@@ -7,6 +7,4 @@ const corsOptions = {
   credentials: true,
 };
 
-const mongooseUrl = 'mongodb://localhost:27017/moviesdb';
-
-module.exports = { corsOptions, mongooseUrl };
+module.exports = { corsOptions };

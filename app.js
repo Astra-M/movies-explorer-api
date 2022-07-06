@@ -6,12 +6,12 @@ const { errors } = require('celebrate');
 const { router } = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./utils/errorHandler');
-const { corsOptions, mongooseUrl } = require('./utils/constants');
+const { corsOptions } = require('./utils/constants');
+
+const { MONGOOSE_URL, PORT = 3001 } = process.env;
 
 const app = express();
-mongoose.connect(mongooseUrl);
-
-const { PORT = 3001 } = process.env;
+mongoose.connect(MONGOOSE_URL);
 app.listen(PORT);
 app.use(express.json());
 
