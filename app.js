@@ -8,10 +8,9 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./utils/errorHandler');
 const { corsOptions } = require('./utils/constants');
 
-const { MONGOOSE_URL, PORT = 3001 } = process.env;
-
+const { NODE_ENV, MONGOOSE_URL, PORT = 3001 } = process.env;
 const app = express();
-mongoose.connect(MONGOOSE_URL);
+mongoose.connect(NODE_ENV === 'production' ? MONGOOSE_URL : 'mongodb://localhost:27017/moviesdb');
 app.listen(PORT);
 app.use(express.json());
 
